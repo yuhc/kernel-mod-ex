@@ -1,3 +1,9 @@
+# Kernel module files
+*.cmd
+*.order
+*.mod.c
+*.symvers
+
 # Object files
 *.o
 *.ko
