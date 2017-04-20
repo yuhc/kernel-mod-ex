@@ -3,11 +3,11 @@
 
 #include <linux/fs.h>
 
-int __init init_char_dev(void);
-void __exit exit_char_dev(void);
+static int __init init_char_dev(void);
+static void __exit exit_char_dev(void);
 
-static init device_open(struct inode *, struct file *);
-static init device_release(struct inode *, struct file *);
+static int device_open(struct inode *, struct file *);
+static int device_release(struct inode *, struct file *);
 static ssize_t device_read(struct file *, char __user *, size_t, loff_t *);
 static ssize_t device_write(struct file *, const char __user *, size_t, loff_t *);
 
