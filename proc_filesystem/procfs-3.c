@@ -5,6 +5,7 @@
 #include <linux/module.h>
 #include <linux/proc_fs.h>
 #include <asm/uaccess.h>
+#include <linux/sched.h>
 #include <asm/current.h>
 #include <linux/cred.h>
 
@@ -12,6 +13,8 @@
 
 #define PROCFS_NAME     "hello_world"
 #define PROCFS_MAX_SIZE 1024
+
+struct task_struct;
 
 ssize_t procfs_read(struct file *, char __user *, size_t, loff_t *);
 ssize_t procfs_write(struct file *, const char __user *, size_t, loff_t *);
@@ -40,7 +43,7 @@ int module_permission(struct inode *inode, int op) {
      * Allow everybody to read, but only root to write
      */
     printk(KERN_INFO "procfs permission checking\n");
-    if (op == 4 || (op == 2 && current_euid() == 0))
+    if (op == 4 || (op == 2 && current_euid().val == 0))
         return 0;
     else
         return -EACCES;
@@ -95,7 +98,20 @@ int init_module(void) {
     if (Proc_File == NULL) {
         return -ENOMEM;
     }
-    Proc_File->proc_iops = proc_iops;
+    /*
+     * General purpose of /proc filesystem is to give kernel and its
+     * modules ability to easily create files with "content" generated
+     * on the fly and directories for group these files. One may do that
+     * by using proc_create() and friends.
+     *
+     * As for inodes and dentries, they are part of filesystem's
+     * internals: it is better to not modify them and their operations.
+     *
+     * Actually, file_operations are powerful by themselves. If you find
+     * mode parameter for proc_create() insufficient to reflect access
+     * rights, you may check access in .open() file operation.
+     */
+    // Proc_File->proc_iops = proc_iops;
     sprintf(procfs_buffer, "Hello World!\n");
     procfs_buffer_size = strlen(procfs_buffer) + 1;
 
