@@ -1,4 +1,4 @@
-obj-m += ioctl.o
+obj-m += chardev.o
 
 CC = gcc
 CFLAGS = -I.
