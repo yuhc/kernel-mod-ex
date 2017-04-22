@@ -1,7 +1,7 @@
 obj-m += chardev.o
 
 CC = gcc
-CFLAGS = -I.
+cflags-y = -I.
 DEPS = chardev.h
 OBJ = ioctl.o
 

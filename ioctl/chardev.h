@@ -26,6 +26,6 @@
 #define DEVICE_FILE_NAME    "helloworld"
 #define DEVICE_NAME         "chardev"
 #define SUCCESS             0
-#defien BUFFER_LEN          80
+#define BUFFER_LEN          80
 
 #endif
